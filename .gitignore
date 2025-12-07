@@ -327,6 +327,15 @@ paket-files/
 __pycache__/
 *.pyc
 
+# Virtual environments
+.venv/
+
+# Modal
+.modal/
+
+# Temporary experiments
+tmp/
+
 # Cake - Uncomment if you are using it
 # tools/**
 # !tools/packages.config

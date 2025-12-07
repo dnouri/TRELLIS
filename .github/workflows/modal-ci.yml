@@ -1,0 +1,36 @@
+name: Modal Integration CI
+
+on:
+  push:
+    paths:
+      - 'trellis_modal/**'
+      - 'pytest.ini'
+      - '.github/workflows/modal-ci.yml'
+  pull_request:
+    paths:
+      - 'trellis_modal/**'
+      - 'pytest.ini'
+      - '.github/workflows/modal-ci.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          src: ./trellis_modal
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install pytest httpx lz4 pillow numpy requests modal fastapi
+      - name: Run tests
+        run: pytest -v

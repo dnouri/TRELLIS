@@ -4,6 +4,13 @@
 <a href='https://microsoft.github.io/TRELLIS/'><img src='https://img.shields.io/badge/Project_Page-Website-green?logo=googlechrome&logoColor=white' alt='Project Page'></a>
 <a href='https://huggingface.co/spaces/Microsoft/TRELLIS'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Live_Demo-blue'></a>
 </p>
+
+---
+
+> **This is a fork.** It adds [Modal](https://modal.com) serverless deployment—run TRELLIS on cloud GPUs without owning hardware. See [Serverless Deployment](#serverless-deployment-modal) or jump to [trellis_modal/](trellis_modal/).
+
+---
+
 <p align="center"><img src="assets/teaser.png" width="100%"></p>
 
 <span style="font-size: 16px; font-weight: 600;">T</span><span style="font-size: 12px; font-weight: 700;">RELLIS</span> is a large 3D asset generation model. It takes in text or image prompts and generates high-quality 3D assets in various formats, such as Radiance Fields, 3D Gaussians, and meshes. The cornerstone of <span style="font-size: 16px; font-weight: 600;">T</span><span style="font-size: 12px; font-weight: 700;">RELLIS</span> is a unified Structured LATent (<span style="font-size: 16px; font-weight: 600;">SL</span><span style="font-size: 12px; font-weight: 700;">AT</span>) representation that allows decoding to different output formats and Rectified Flow Transformers tailored for <span style="font-size: 16px; font-weight: 600;">SL</span><span style="font-size: 12px; font-weight: 700;">AT</span> as the powerful backbones. We provide large-scale pre-trained models with up to 2 billion parameters on a large 3D asset dataset of 500K diverse objects. <span style="font-size: 16px; font-weight: 600;">T</span><span style="font-size: 12px; font-weight: 700;">RELLIS</span> significantly surpasses existing methods, including recent ones at similar scales, and showcases flexible output format selection and local 3D editing capabilities which were not offered by previous models.
@@ -197,6 +204,32 @@ python app.py
 ```
 
 Then, you can access the demo at the address shown in the terminal.
+
+
+### Serverless Deployment (Modal)
+
+This fork includes [Modal](https://modal.com) integration for running TRELLIS on serverless GPUs. No local GPU required—images are sent to Modal's cloud infrastructure, you pay only for compute time used.
+
+```bash
+# Deploy to Modal
+pip install modal && modal token new
+modal deploy -m trellis_modal.service.service
+
+# Create an API key
+python -m trellis_modal.service.auth add-key --name dev
+
+# Run the client
+export TRELLIS_API_KEY="sk_dev_..."
+export TRELLIS_API_URL="https://your-app.modal.run"
+python -m trellis_modal.client.app
+```
+
+Upload an image, generate 3D, export GLB. Cost is ~$0.09 per model on A100-40GB.
+
+**Documentation:**
+- [Design Notes](trellis_modal/docs/DESIGN.md) — Why we built it this way
+- [Integration Guide](trellis_modal/docs/MODAL_INTEGRATION.md) — Deployment, API reference, troubleshooting
+- [Operations Runbook](trellis_modal/docs/OPERATIONS_RUNBOOK.md) — Day-to-day operations
 
 
 <!-- Dataset -->
